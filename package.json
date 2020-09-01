@@ -1,0 +1,30 @@
+{
+  "name": "mhj-podologia-cron",
+  "version": "1.0.0",
+  "description": "podologia-cron",
+  "main": "podocron.js",
+  "scripts": {
+    "test": "echo \\\"Error: no test specified\\\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mhjmhj2002/mhj-podologia-cron.git"
+  },
+  "keywords": [
+    "podologia"
+  ],
+  "author": "MHJ",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mhjmhj2002/mhj-podologia-cron/issues"
+  },
+  "homepage": "https://github.com/mhjmhj2002/mhj-podologia-cron#readme",
+  "dependencies": {
+    "consign": "^0.1.6",
+    "express": "^4.17.1",
+    "fs": "0.0.1-security",
+    "mysql": "^2.18.1",
+    "node-cron": "^2.0.3",
+    "nodemailer": "^6.4.11"
+  }
+}
