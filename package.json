@@ -2,7 +2,7 @@
   "name": "mhj-podologia-cron",
   "version": "1.0.0",
   "description": "podologia-cron",
-  "main": "podocron.js",
+  "main": "mhj.js",
   "scripts": {
     "test": "echo \\\"Error: no test specified\\\" && exit 1"
   },

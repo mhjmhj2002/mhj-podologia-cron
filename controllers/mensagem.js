@@ -1,21 +1,12 @@
 module.exports = function () {
 
-  // const mysql = require('mysql');
-
   var pool;
-  //  = mysql.createPool({
-  //   connectionLimit: 10,
-  //   host: '31.170.161.43',
-  //   user: 'u695513924_clinica',
-  //   password: '@Mhj197704',
-  //   database: 'u695513924_podologia'
-  // });
 
   const cron = require("node-cron");
 
-  cron.schedule("*/5 * * * * *", function () {//teste 5 segundos
-  // cron.schedule("* * * * *", function () {
-    console.log("Running Cron Job");
+  // cron.schedule("*/5 * * * * *", function () {//teste 5 segundos
+  cron.schedule("* * * * *", function () {
+    // console.log("Running Cron Job");
     execute();
   });
 }
@@ -39,7 +30,7 @@ function iniciarPool(){
 }
 
 function buscarMensagensParaEnviar() {
-  console.log("enviarEmails " );
+  // console.log("enviarEmails " );
 
   this.pool.getConnection(function (err, connection) {
     if (err) {
@@ -49,14 +40,10 @@ function buscarMensagensParaEnviar() {
       if (err) {
         throw err;
       } else {
-        console.log( mensagens );
+        // console.log( mensagens );
         mensagens.forEach(element => {
-          if (enviarEmail(element)){
-            atualizarStatus(element, 2);
-          } else {
-            atualizarStatus(element, 3);
-          }
-          console.log(element.email);
+          atualizarStatus(element, enviarEmail(element));
+          // console.log(element.email);
         });
       }
     });
@@ -78,27 +65,38 @@ function enviarEmail(element) {
       pass: "@Mhj197704" // generated ethereal password
     }
   });
+
+  var mensagem = ''+
+  '<b>Olá ' + element.nome + ',</b><br>'+
+  '<b>Recebimos a sua mensagem, assim que possível retornaremos.</b><br><br><br>'+
+  '<b>Mensagem enviada:<b><br>'+
+  '<b>' + element.mensagem + '</b><br><br><br>'+
+  '<b>Mensagem Enviada Via www.podologialabarca.com.br</b>'
+  ;
+
   const mailOptions = {
     from: 'Podologia Labarca clinica@podologialabarca.com.br', // sender address
-    to: '"' + element.nome + '" ' + element.email,//'jane.doe@example.com', // list of receivers
-    cc: 'Podologia Labarca clinica@podologialabarca.com.br',
+    to: element.nome + ' ' + element.email,//'jane.doe@example.com', // list of receivers
+    bcc: 'podologialabarca@gmail.com;mhjmhj2002@gmail.com',
     subject: element.titulo,//'Hello there!', // Subject line
     // text: element.mensagem,//'A Message from Node Cron App', // plain text body
-    html: '<b>Mensagem Enviada Via www.podologialabarca.com.br</b><br><b>' + element.mensagem + '</b>' // html body
+    html: mensagem
   };
   transporter.sendMail(mailOptions, function (error, info) {
 
     if (error) {
       console.log(error);
-      return false;
+      return 3;
     }
-    console.log(info.messageId);
-    console.log("enviado");
-    return true;
+    // console.log(info.messageId);
+    // console.log("enviado");
+    return 2;
   });
+  return 2;
 }
 
 function atualizarStatus(element, status) {
+  // console.log("status " + status);
   this.pool.getConnection(function (err, connection) {
     if (err) {
       throw err;
@@ -107,7 +105,7 @@ function atualizarStatus(element, status) {
       if (err) {
         throw err;
       } else {
-        console.log( retorno );
+        // console.log( retorno );
       }
     });
 
