@@ -1,6 +1,17 @@
-module.exports = function () {
 
-  var pool;
+var count = 0;
+
+const mysql = require('mysql');
+
+var pool = mysql.createPool({
+  connectionLimit: 10,
+  host: '31.170.161.43',
+  user: 'u695513924_clinica',
+  password: '@Mhj197704',
+  database: 'u695513924_podologia'
+});
+
+module.exports = function () {
 
   const cron = require("node-cron");
 
@@ -12,27 +23,21 @@ module.exports = function () {
 }
 
 function execute() {
-  iniciarPool();
+  validateLog();
   buscarMensagensParaEnviar();
 }
 
-function iniciarPool(){
-
-  const mysql = require('mysql');
-
-  this.pool = mysql.createPool({
-    connectionLimit: 10,
-    host: '31.170.161.43',
-    user: 'u695513924_clinica',
-    password: '@Mhj197704',
-    database: 'u695513924_podologia'
-  });
+function validateLog(){
+  count++;
+  if(count % 720 == 0){
+    console.log(new Date());
+  } 
 }
 
 function buscarMensagensParaEnviar() {
   // console.log("enviarEmails " );
 
-  this.pool.getConnection(function (err, connection) {
+  pool.getConnection(function (err, connection) {
     if (err) {
       throw err;
     }
@@ -40,7 +45,7 @@ function buscarMensagensParaEnviar() {
       if (err) {
         throw err;
       } else {
-        // console.log( mensagens );
+        // console.log( "mensagens: ", mensagens );
         mensagens.forEach(element => {
           atualizarStatus(element, enviarEmail(element));
           // console.log(element.email);
@@ -97,7 +102,7 @@ function enviarEmail(element) {
 
 function atualizarStatus(element, status) {
   // console.log("status " + status);
-  this.pool.getConnection(function (err, connection) {
+  pool.getConnection(function (err, connection) {
     if (err) {
       throw err;
     }
